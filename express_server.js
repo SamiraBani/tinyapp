@@ -51,19 +51,20 @@ app.get("/urls.json", (req, res) => {
  });
 
  app.get("/urls/new", (req, res) => {
-   res.render("urls_new");
+  const templateVars = {email: req.cookies["email"]} 
+  res.render("urls_new", templateVars);
  });
 
  
  app.get("/urls", (req, res) => {
 
-   const templateVars = { urls: urlDatabase,  username: req.cookies["username"]};
+   const templateVars = { urls: urlDatabase,  email: req.cookies["email"]};
    res.render("urls_index", templateVars);
  });
  
 
 app.get("/urls/:shortURL", (req, res) => {
-   const templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL], username: req.cookies["username"]};
+   const templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL], email: req.cookies["email"]};
    res.render("urls_show", templateVars);
  });
 
@@ -105,20 +106,41 @@ app.get("/urls/:shortURL", (req, res) => {
    res.redirect('/urls');
  });
 
+ app.get("/url_login", (req, res) => {
+  const templateVars = {email: null}
+  res.render("url_login", templateVars);
+ })
+
 app.post("/login", (req, res) => {
-  console.log(req.body);
-  const username = req.body.username;
-  res.cookie('username', username);
-  res.redirect('/urls');
+  // console.log(req.body);
+  const incomingEmail = req.body.email;
+  const incomingPassword = req.body.password;
+  const user = fetchUser(users, incomingEmail);
+
+  if(user){
+    if (incomingPassword === user.password){
+      res.cookie('email', incomingEmail);
+      return res.redirect('/urls');
+    }
+    return res.send("wrong password");
+  } 
+  res.send("Email not found");
  });
 
+//  app.get("/logout", (req, res) => {
+//   const templateVars = {email: null}
+//   res.render("/urls_new", templateVars);
+  
+//  });
+
  app.post("/logout", (req, res) => {
-  res.clearCookie('username');
-  res.redirect('/urls');
+  res.clearCookie('email');
+  res.redirect('/urls_new');
  });
 
  app.get("/url_register", (req, res) => {
-   res.render('/urls');
+  const templateVars = {email: null}
+  res.render("url_register", templateVars);
 });
    
 app.post("/url_register", (req, res) => {

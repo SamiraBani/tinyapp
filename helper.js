@@ -15,11 +15,13 @@ const passwordMatching = (userDatabase, email, password) => {
 }
 
 const fetchUser = (userDatabase, email) => {
-   if (userDatabase[email]) {
-      return userDatabase[email];
-   } else {
-      return {};
+   for(const userId in userDatabase) {
+      const user = userDatabase[userId];
+      if (user.email === email){
+         return user;
+      }
    }
+   return null;
 }
 
-module.export = {emailExists, passwordMatching, fetchUser}
+module.exports = {emailExists, passwordMatching, fetchUser}
