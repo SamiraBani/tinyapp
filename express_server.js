@@ -52,18 +52,7 @@ app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
 });
 
-// app.get("/urls.json", (req, res) => {
-//   res.json(urlDatabase);
-// });
-
-// app.get("/hello", (req, res) => {
-//   res.send("<html><body>Hello <b>World</b></body></html>\n");
-// });
-
 app.get("/urls/new", (req, res) => {
-  // const templateVars = { email: req.session["email"] };
-  // res.render("urls_new", templateVars);
-
   const email = req.session["email"];
   let templateVars = { email: email };
   if (users[email]) {
@@ -73,9 +62,6 @@ app.get("/urls/new", (req, res) => {
 });
 
 app.get("/urls", (req, res) => {
-  // const templateVars = { urls: urlDatabase, email: req.session["email"] };
-  // res.render("urls_index", templateVars);
-
   const email = req.session["email"];
   let templateVars = { urls: urlDatabase, email: email };
   if (users[email]) {
@@ -95,21 +81,12 @@ app.get("/urls/:shortURL", (req, res) => {
   res.render("urls_show", templateVars);
 });
 
-//  app.post("/urls", (req, res) => {
-//    console.log(req.body);  // Log the POST request body to the console
-//    res.send("Ok");         // Respond with 'Ok' (we will replace this)
-//  });
-
 app.get("/u/:shortURL", (req, res) => {
   const longURL = urlDatabase[req.params.shortURL];
   res.redirect(longURL);
 });
 
 app.post("/urls", (req, res) => {
-  // const generatedUrl = generateRandomString();
-  // urlDatabase[generatedUrl] = req.body.longURL;
-  // res.redirect(`/urls/${generatedUrl}`);
-
   const generatedUrl = generateRandomString();
   const email = req.session["email"];
   if (!users[email]) {
@@ -154,9 +131,6 @@ app.post("/urls/:shortURL", (req, res) => {
 });
 
 app.get("/login", (req, res) => {
-  // const templateVars = { email: null };
-  // res.render("url_login", templateVars);
-
   const email = req.session["email"];
   let templateVars = { email: null };
   if (users[email]) {
@@ -166,7 +140,6 @@ app.get("/login", (req, res) => {
 });
 
 app.post("/login", (req, res) => {
-  // console.log(req.body);
   const incomingEmail = req.body.email;
   const incomingPassword = req.body.password;
   const user = fetchUser(users, incomingEmail);
@@ -197,9 +170,6 @@ app.post("/logout", (req, res) => {
 });
 
 app.get("/register", (req, res) => {
-  // const templateVars = { email: null };
-  // res.render("url_register", templateVars);
-
   const email = req.session["email"];
   let templateVars = { email: null };
   if (users[email]) {
@@ -220,7 +190,6 @@ app.post("/register", (req, res) => {
 
   if (emailExists(users, incomingEmail)) {
     res.send("email already exist!");
-    // res.redirect("/register");
   } else {
     const newUser = {
       id: incomingId,
