@@ -6,22 +6,31 @@ const emailExists = (userDatabase, email) => {
    }
 }
 
-const passwordMatching = (userDatabase, email, password) => {
-   if (userDatabase[email].password === password) {
-      return true
-   } else {
-      return false;
-   }
-}
+const generateRandomString = function() {
+   let rand = Math.random()
+     .toString(36)
+     .substring(7, 1);
+   return rand;
+ };
 
-const fetchUser = (userDatabase, email) => {
-   for(const userId in userDatabase) {
-      const user = userDatabase[userId];
-      if (user.email === email){
-         return user;
-      }
+const getUserByEmail = function(email, users) {
+   for (let item in users) {
+     if (users[item].email === email) {
+       return item;
+     }
    }
-   return null;
-}
+ };
 
-module.exports = {emailExists, passwordMatching, fetchUser}
+const urlsForUser = function(id, urlDatabase) {
+   let newUrlDatabase = {};
+   for (let item in urlDatabase) {
+     if (urlDatabase[item].userID === id) {
+       newUrlDatabase[item] = {
+         longURL: urlDatabase[item].longURL
+       };
+     }
+   }
+   return newUrlDatabase;
+ };
+
+module.exports = {emailExists, getUserByEmail, urlsForUser, generateRandomString}
