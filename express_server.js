@@ -73,14 +73,12 @@ app.get("/urls/:shortURL", (req, res) => {
     };
     return res.render("urls_show", templateVars);
   }
-  const err = "Access denied!";
   return res.send("Access denied!")
 });
 
 
 app.get("/u/:shortURL", (req, res) => {
   const shortURL = req.params.shortURL;
-  const userId = req.session['user_id'];
   if (!urlDatabase[shortURL]) {
     return res.send("URL does not exist!")
   }
@@ -113,7 +111,6 @@ app.post('/urls/:shortURL', (req, res)=>{
     return res.send("You need to register or login to edit URL!")
   }
   if (urlDatabase[shortURL].userID !== userId) {
-    const err = "You can not edit others URL!";
     return res.send("You can not edit others URL!")
   }
   for (let url in urlDatabase) {
@@ -152,9 +149,6 @@ app.get('/login', (req, res) => {
 
 app.post('/login', (req, res) => {
   const { email, password } = req.body;
-  let templateVars = {
-    user: null
-  };
   if (email === '' || password === '') {
     const err = "Email and pasword are required!";
     return res.send(err)
@@ -191,9 +185,6 @@ app.get('/register', (req, res) => {
 
 app.post('/register', (req, res) => {
   const { email, password } = req.body;
-  let templateVars = {
-    user: null
-  };
   if (email === '' || password === '') {
     const err = "Email and pasword are required!";
     return res.send(err)
