@@ -1,6 +1,6 @@
 const express = require("express");
 const cookieSession = require("cookie-session");
-const bodyParser = require("body-Parser");
+const bodyParser = require("body-parser");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
 const { getUserByEmail, urlsForUser, generateRandomString } = require("./helper");
